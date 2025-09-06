@@ -1,6 +1,7 @@
 
 import Helmet from "@/components/Helmet"
 import Footer from "@/components/Footer"
+import TopMenu from "@/components/TopMenu"
 import { Button } from "@/components/ui/button"
 import { Play, Pause, Loader2 } from "lucide-react"
 import { useAudio, STATIONS } from "@/contexts/AudioContext"
@@ -21,38 +22,37 @@ const Index = () => {
         twitterImage="https://soundshineradio.com/img/socials/fb_link_cover.jpg"
       />
       <div 
-        className="min-h-screen w-full text-white flex flex-col custom-gradient"
+        className="min-h-screen w-full text-white flex flex-col custom-gradient relative"
       >
+        <TopMenu />
         
-        <div className="mx-auto max-w-7xl px-4 flex-grow flex flex-col items-center justify-start pt-32">
-          <div className="flex flex-col items-center justify-center space-y-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex-grow flex flex-col items-center justify-start pt-16 sm:pt-24 lg:pt-32">
+          <div className="flex flex-col items-center justify-center space-y-6 sm:space-y-8 animate-fade-in">
             <img 
               src="logo.png" 
-              width="75%"
-              height="75%"
               alt="soundSHINE Radio" 
-              className="w-100 h-auto mb-6"
+              className="w-full max-w-xs sm:max-w-md lg:max-w-lg xl:max-w-xl h-auto mb-4 sm:mb-6 hover-scale"
             />
 
-            <div className="flex justify-center mb-12">
+            <div className="flex justify-center mb-8 sm:mb-12">
               {playerState.isLoading ? (
                 <Button 
                   variant="outline"
-                  className="w-32 h-32 rounded-full bg-[#220d50]/10 backdrop-blur-lg border-white/20 hover:bg-[#220d50]/20"
+                  className="mobile-play-button bg-white/10 backdrop-blur-lg border-white/20 hover:bg-white/20 pulse-on-hover"
                   disabled
                 >
-                  <Loader2 className="h-12 w-12 animate-spin text-white" />
+                  <Loader2 className="mobile-play-icon animate-spin text-white" />
                 </Button>
               ) : (
                 <Button
                   variant="outline"
-                  className="w-32 h-32 rounded-full bg-[#220d50]/10 backdrop-blur-lg border-white/20 hover:bg-[#4d1fae]/20 transition-all duration-300"
+                  className="mobile-play-button bg-white/10 backdrop-blur-lg border-white/20 hover:bg-white/20 transition-all duration-300 hover-scale-110"
                   onClick={() => !playerState.isPlaying ? handlePlay(STATIONS[0]) : handlePause()}
                 >
                   {playerState.isPlaying ? (
-                    <Pause className="h-12 w-12 text-white" fill="white" />
+                    <Pause className="mobile-play-icon text-white" fill="white" />
                   ) : (
-                    <Play className="h-12 w-12 text-white" fill="white" />
+                    <Play className="mobile-play-icon text-white" fill="white" />
                   )}
                 </Button>
               )}

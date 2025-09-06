@@ -50,7 +50,7 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -64,8 +64,21 @@
   100% { background-position: 0% 50%; }
 }
 
+@keyframes pulseGlow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.2);
+  }
+}
+
 .animate-fade-in {
-  animation: fadeIn 0.3s ease-out forwards;
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.pulse-on-hover:hover {
+  animation: pulseGlow 2s ease-in-out infinite;
 }
 
 /* New custom gradient class */
@@ -92,4 +105,39 @@
 .custom-volume-slider .radix-slider-thumb {
   background-color: #220d50 !important;
   border-color: #220d50 !important;
+}
+
+/* Mobile Optimizations */
+.mobile-play-button {
+  @apply w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 rounded-full;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.mobile-play-icon {
+  @apply h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12;
+}
+
+/* Interactive Elements */
+.hover-scale {
+  @apply transition-transform duration-300 ease-out;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.hover-scale-110:hover {
+  transform: scale(1.1);
+}
+
+/* Mobile-first responsive utilities */
+@media (max-width: 640px) {
+  .mobile-optimized {
+    @apply px-4 py-2;
+  }
+  
+  .mobile-text {
+    @apply text-sm leading-relaxed;
+  }
 }

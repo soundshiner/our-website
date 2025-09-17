@@ -2,8 +2,9 @@ import React, { createContext, useContext, useState, useRef, useEffect, ReactNod
 import { PlayerState, RadioStation } from '@/types/radio';
 import { icecastService } from '@/services/icecastService';
 import { lastfmService } from '@/services/lastfmService';
+import { STATIONS } from './stations';
 
-interface AudioContextType {
+export interface AudioContextType {
   playerState: PlayerState;
   audioRef: React.RefObject<HTMLAudioElement>;
   handlePlay: (station: RadioStation) => Promise<void>;
@@ -11,18 +12,8 @@ interface AudioContextType {
   handleVolumeChange: (value: number) => void;
 }
 
-const AudioContext = createContext<AudioContextType | undefined>(undefined);
+import { AudioContext } from './audioContextInstance';
 
-const STATIONS: RadioStation[] = [
-  {
-    id: "mainstream",
-    name: "Mainstream",
-    description: "Les meilleurs hits du moment",
-    streamUrl: "https://listen.soundshineradio.com/stream",
-    metadataUrl: "https://listen.soundshineradio.com/status-json",
-    genre: "Pop"
-  }
-];
 
 export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [playerState, setPlayerState] = useState<PlayerState>({
@@ -155,6 +146,11 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     if (audioRef.current) {
       audioRef.current.volume = value;
       setPlayerState(prev => ({ ...prev, volume: value }));
+      // Si le volume passe de 0 à > 0, relancer la lecture
+      if (value > 0 && playerState.isPlaying === false) {
+        audioRef.current.play();
+        setPlayerState(prev => ({ ...prev, isPlaying: true }));
+      }
     }
   };
 
@@ -171,7 +167,7 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         audioRef.current = null;
       }
     };
-  }, []);
+  }, [playerState.volume]);
 
   const value: AudioContextType = {
     playerState,
@@ -188,6 +184,7 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAudio = () => {
   const context = useContext(AudioContext);
   if (context === undefined) {
@@ -195,5 +192,3 @@ export const useAudio = () => {
   }
   return context;
 };
-
-export { STATIONS };

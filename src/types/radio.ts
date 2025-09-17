@@ -17,6 +17,7 @@ export interface PlayerState {
   currentArtist?: string;
   currentTitle?: string;
   albumCover?: string | null;
+  recentTracks?: { artist: string; title: string; coverUrl?: string | null }[];
 }
 
 export interface IcecastMetadata {

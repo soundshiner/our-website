@@ -1,8 +1,52 @@
-import { FaInstagram, FaYoutube, FaTiktok, FaMastodon, FaDiscord } from "react-icons/fa"
+import { FaInstagram, FaYoutube, FaTiktok, FaMastodon, FaDiscord, FaFacebook, FaTwitter } from "react-icons/fa"
 import { FaBluesky } from "react-icons/fa6"
 import { Link } from "react-router-dom"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 const Footer = () => {
+  const isMobile = useIsMobile();
+
+  // Version mobile épurée - juste les réseaux sociaux
+  if (isMobile) {
+    return (
+      <footer className="w-full py-8">
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Réseaux sociaux centrés */}
+          <div className="flex justify-center space-x-6 mb-6">
+            <SocialIcon 
+              href="https://www.instagram.com/soundshiner/" 
+              Icon={FaInstagram}
+              label="Instagram"
+            />
+            <SocialIcon 
+              href="https://discord.gg/uhc7RUSk84" 
+              Icon={FaDiscord}
+              label="Discord"
+            />
+            <SocialIcon 
+              href="https://www.facebook.com/soundshiner/" 
+              Icon={FaFacebook}
+              label="Facebook"
+            />
+            <SocialIcon 
+              href="https://www.x.com/soundshiner/" 
+              Icon={FaTwitter}
+              label="Twitter"
+            />
+          </div>
+
+          {/* Copyright centré */}
+          <div className="text-center mt-4">
+            <p className="text-[#aff6e4]/80 text-xs">
+              &copy; 2020-{new Date().getFullYear()} soundSHINE Radio. Tous droits réservés.
+            </p>
+          </div>
+        </div>
+      </footer>
+    );
+  }
+
+  // Version desktop complète (inchangée)
   return (
     <footer className="w-full bg-muted border-t border-border py-8 mt-16">
       <div className="max-w-7xl mx-auto px-12">
@@ -135,16 +179,15 @@ const Footer = () => {
             >
               <FaYoutube size={20} />
             </a>
-                        <a 
-              href="#" 
+            <a 
+              href="https://discord.gg/uhc7RUSk84" 
               target="_blank"
               className="text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="YouTube"
+              aria-label="Discord"
             >
               <FaDiscord size={20} />
             </a>
           </div>
-
         </div>
 
         {/* Bottom Bar */}
@@ -157,5 +200,18 @@ const Footer = () => {
     </footer>
   )
 }
+
+// Composant SocialIcon pour mobile
+const SocialIcon = ({ href, Icon, label }) => (
+  <a 
+    href={href} 
+    target="_blank"
+    rel="noopener noreferrer"
+    className="p-3 rounded-full bg-purple/30 backdrop-blur-lg border-white/20 text-purple-800 hover:bg-white/20 transition-all duration-300 hover:scale-110"
+    aria-label={label}
+  >
+    <Icon size={24} />
+  </a>
+);
 
 export default Footer

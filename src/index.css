@@ -141,3 +141,352 @@
     @apply text-sm leading-relaxed;
   }
 }
+/* Ajouts CSS pour les améliorations mobile */
+/* À ajouter dans src/index.css */
+
+/* Animations supplémentaires pour mobile */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Classes utilitaires pour mobile */
+.slide-in-right {
+  animation: slideInFromRight 0.3s ease-out forwards;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+/* Header mobile fixe */
+.mobile-header {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Menu mobile overlay amélioré */
+.mobile-menu-overlay {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Amélioration des effets de glassmorphism */
+.glass-effect {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Effets hover pour mobile (touch-friendly) */
+@media (hover: hover) {
+  .mobile-hover:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
+  }
+}
+
+/* Safe areas pour les appareils avec notch */
+@supports (padding: max(0px)) {
+  .mobile-safe-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+  
+  .mobile-safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* Optimisations pour les petits écrans */
+@media (max-width: 375px) {
+  .mobile-compact {
+    padding: 0.75rem;
+  }
+  
+  .mobile-text-small {
+    font-size: 0.875rem;
+  }
+}
+
+/* Amélioration des boutons pour touch */
+.touch-friendly {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Réduction de l'espace pour mobile */
+@media (max-width: 640px) {
+  .mobile-spacing-reduce {
+    margin-bottom: 1rem;
+  }
+  
+  .mobile-spacing-reduce:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Ajouts CSS pour les améliorations mobile */
+/* À ajouter dans src/index.css */
+
+/* Animations supplémentaires pour mobile */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseScale {
+  0%, 100% { 
+    transform: scale(1);
+  }
+  50% { 
+    transform: scale(1.05);
+  }
+}
+
+@keyframes musicWave {
+  0%, 100% { height: 4px; }
+  25% { height: 12px; }
+  50% { height: 8px; }
+  75% { height: 16px; }
+}
+
+/* Classes utilitaires pour mobile */
+.slide-in-right {
+  animation: slideInFromRight 0.3s ease-out forwards;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.pulse-scale {
+  animation: pulseScale 2s ease-in-out infinite;
+}
+
+/* Header mobile fixe */
+.mobile-header {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Menu mobile overlay amélioré */
+.mobile-menu-overlay {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Amélioration des effets de glassmorphism */
+.glass-effect {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(34, 13, 80, 0.2);
+  border: 1px solid rgba(77, 31, 174, 0.3);
+}
+
+/* Slider volume personnalisé */
+.slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.slider-thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #4d1fae, #f0b1f7);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(77, 31, 174, 0.3);
+  transition: all 0.2s ease;
+}
+
+.slider-thumb::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(77, 31, 174, 0.5);
+}
+
+.slider-thumb::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #4d1fae, #f0b1f7);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(77, 31, 174, 0.3);
+  transition: all 0.2s ease;
+}
+
+.slider-thumb::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(77, 31, 174, 0.5);
+}
+
+/* Effets hover pour mobile (touch-friendly) */
+@media (hover: hover) {
+  .mobile-hover:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.02);
+  }
+
+  .hover-scale-110:hover {
+    transform: scale(1.1);
+  }
+}
+
+/* Animations pour les barres musicales */
+.music-bars > div:nth-child(1) {
+  animation: musicWave 1.2s ease-in-out infinite;
+}
+
+.music-bars > div:nth-child(2) {
+  animation: musicWave 1.2s ease-in-out infinite 0.1s;
+}
+
+.music-bars > div:nth-child(3) {
+  animation: musicWave 1.2s ease-in-out infinite 0.2s;
+}
+
+/* Safe areas pour les appareils avec notch */
+@supports (padding: max(0px)) {
+  .mobile-safe-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+  
+  .mobile-safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* Optimisations pour les petits écrans */
+@media (max-width: 375px) {
+  .mobile-compact {
+    padding: 0.75rem;
+  }
+  
+  .mobile-text-small {
+    font-size: 0.875rem;
+  }
+}
+
+/* Amélioration des boutons pour touch */
+.touch-friendly {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Réduction de l'espace pour mobile */
+@media (max-width: 640px) {
+  .mobile-spacing-reduce {
+    margin-bottom: 1rem;
+  }
+  
+  .mobile-spacing-reduce:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Bouton play amélioré */
+.play-button-enhanced {
+  position: relative;
+  overflow: hidden;
+}
+
+.play-button-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(77, 31, 174, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  transition: all 0.6s ease;
+  transform: translate(-50%, -50%);
+}
+
+.play-button-enhanced:hover::before {
+  width: 120%;
+  height: 120%;
+}
+
+.play-button-enhanced:active {
+  transform: scale(0.95);
+}
+
+/* Logo adaptatif avec animations */
+.logo-mobile {
+  position: relative;
+  overflow: hidden;
+}
+
+.logo-mobile::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(175, 246, 228, 0.1), transparent);
+  transform: rotate(45deg);
+  transition: all 0.8s ease;
+  opacity: 0;
+}
+
+.logo-mobile:hover::after {
+  animation: shimmer 1.5s ease-in-out;
+  opacity: 1;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+/* Micro-interactions pour les éléments interactifs */
+.micro-interaction {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.micro-interaction:hover {
+  transform: translateY(-1px);
+}
+
+.micro-interaction:active {
+  transform: translateY(0);
+}

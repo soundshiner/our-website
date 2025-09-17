@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from './Header';
 import PlayerBar from './PlayerBar';
-import { useAudio } from '@/contexts/AudioContext';
+import { useAudio } from '@/contexts/useAudio';
 
 interface LayoutProps {
   children: ReactNode;
@@ -16,7 +16,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col">
       {!isHomePage && <Header />}
-      <main className="flex-1 pb-20">
+      <main className="flex-1">
         {children}
       </main>
       {playerState.currentStation && (

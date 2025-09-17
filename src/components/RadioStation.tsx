@@ -29,17 +29,20 @@ const RadioStation = ({ station, isPlaying, isLoading, onPlay, onPause }: RadioS
           onClick={() => isPlaying ? onPause() : onPlay(station)}
           disabled={isLoading}
           className={cn(
-            "rounded-full p-6 transition-all",
+            "rounded-full p-7 transition-all",
             "bg-[#9b87f5]/10 hover:bg-[#9b87f5]/20",
             "text-white hover:scale-105",
             "active:scale-95",
-            isLoading && "animate-pulse"
+            isLoading && "animate-pulse border-4 border-[#9b87f5]"
           )}
         >
-          <i className={cn(
-            "fa-solid",
-            isLoading ? "fa-spinner fa-spin" : isPlaying ? "fa-pause" : "fa-play"
-          )}></i>
+          <i
+            className={cn(
+              "fa-solid",
+              isLoading ? "fa-spinner fa-spin text-5xl text-[#9b87f5]" : isPlaying ? "fa-pause text-5xl" : "fa-play text-5xl"
+            )}
+            aria-label={isLoading ? "Chargement" : isPlaying ? "Pause" : "Lecture"}
+          ></i>
         </button>
       </div>
     </div>

@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react"
 import { RadioStation as RadioStationType } from "@/types/radio"
 import { PlayerState } from "@/types/radio"
@@ -8,6 +7,7 @@ import { Play, Pause, Loader2 } from "lucide-react"
 import { Button } from "./ui/button"
 import { icecastService } from "@/services/icecastService"
 import { lastfmService } from "@/services/lastfmService"
+import TopMenu from "./TopMenu"
 
 const STATIONS: RadioStationType[] = [
   {
@@ -49,7 +49,6 @@ const RadioPlayer = () => {
         const { artist, title } = metadata
         console.log("Got metadata:", { artist, title })
 
-        // Update player state with new metadata
         setPlayerState(prev => ({
           ...prev,
           currentArtist: artist,
@@ -57,7 +56,6 @@ const RadioPlayer = () => {
           isLoading: false
         }))
 
-        // Fetch album cover in the background
         try {
           const albumCover = await lastfmService.getAlbumArt(artist, title)
           setPlayerState(prev => ({
@@ -101,7 +99,6 @@ const RadioPlayer = () => {
 
     try {
       if (playerState.currentStation?.id === station.id) {
-        // Resume same station
         await audioRef.current.play()
         setPlayerState(prev => ({ 
           ...prev, 
@@ -109,7 +106,6 @@ const RadioPlayer = () => {
           isLoading: false 
         }))
       } else {
-        // Switch to new station
         if (metadataIntervalRef.current) {
           window.clearInterval(metadataIntervalRef.current)
         }
@@ -122,18 +118,16 @@ const RadioPlayer = () => {
           ...prev,
           isPlaying: true,
           currentStation: station,
-          currentArtist: 'Radio SoundShine',
-          currentTitle: 'Connexion en cours...',
+          currentArtist: 'soundSHINE Radio',
+          currentTitle: 'En cours de chargement...',
           albumCover: null
         }))
 
-        // Fetch metadata immediately
         await fetchMetadata(station)
 
-        // Set up periodic metadata refresh
         metadataIntervalRef.current = window.setInterval(() => {
           fetchMetadata(station)
-        }, 15000) // Check every 15 seconds
+        }, 15000)
       }
     } catch (error) {
       console.error('Failed to play audio:', error)
@@ -176,57 +170,105 @@ const RadioPlayer = () => {
   }, [playerState.volume])
 
   return (
-    <div 
-      className="min-h-screen w-full text-white flex flex-col custom-gradient"
-    >
+    <div className="min-h-screen w-full text-white flex flex-col bg-gradient-to-br from-purple-400 via-pink-300 to-green-300 animate-gradient-xy">
       
-      <div className="mx-auto max-w-7xl px-4 flex-grow flex flex-col items-center justify-start pt-32">
-        <div className="flex flex-col items-center justify-center space-y-8">
-          <img 
-            src="logo.png" 
-            width="75%"
-            height="75%"
-            alt="soundSHINE Radio" 
-            className="w-100 h-auto mb-6"
-          />
+      {/* Menu flottant optimisé mobile */}
+      <TopMenu />
+      
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 flex-grow flex flex-col items-center justify-center py-8 sm:py-16">
+        <div className="flex flex-col items-center justify-center space-y-6 sm:space-y-8 w-full">
+          
+          {/* Logo responsive optimisé */}
+          <div className="w-full max-w-xs sm:max-w-md lg:max-w-lg">
+            <img 
+              src="logo.png" 
+              alt="soundSHINE Radio" 
+              className="w-full h-auto drop-shadow-2xl"
+            />
+          </div>
 
-          <div className="flex justify-center mb-12">
+          {/* Bouton de lecture avec effet de pulsation */}
+          <div className="flex justify-center">
             {playerState.isLoading ? (
               <Button 
                 variant="outline"
-                className="w-32 h-32 rounded-full bg-[#220d50]/10 backdrop-blur-lg border-white/20 hover:bg-[#220d50]/20"
+                className="w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 rounded-full bg-white/20 backdrop-blur-lg border-white/30 hover:bg-white/30 transition-all duration-300"
                 disabled
               >
-                <Loader2 className="h-12 w-12 animate-spin text-white" />
+                <Loader2 className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 animate-spin text-white" />
               </Button>
             ) : (
               <Button
                 variant="outline"
-                className="w-32 h-32 rounded-full bg-[#220d50]/10 backdrop-blur-lg border-white/20 hover:bg-[#4d1fae]/20 transition-all duration-300"
+                className={`w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 rounded-full bg-white/20 backdrop-blur-lg border-white/30 hover:bg-white/30 transition-all duration-300 hover:scale-105 active:scale-95 ${
+                  playerState.isPlaying ? 'animate-pulse ring-4 ring-white/30' : ''
+                }`}
                 onClick={() => !playerState.isPlaying ? handlePlay(STATIONS[0]) : handlePause()}
               >
                 {playerState.isPlaying ? (
-                  <Pause className="h-12 w-12 text-white" fill="white" />
+                  <Pause className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-white" fill="white" />
                 ) : (
-                  <Play className="h-12 w-12 text-white" fill="white" />
+                  <Play className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-white" fill="white" />
                 )}
               </Button>
             )}
           </div>
+
+          {/* Message d'encouragement mobile */}
+          <div className="text-center space-y-2 px-4">
+            <p className="text-sm sm:text-base text-white/80 font-medium">
+              🎵 Prêt.e à découvrir de nouveaux sons ?
+            </p>
+            <p className="text-xs sm:text-sm text-white/60">
+              Appuie sur play et laisse-toi porter !
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="flex justify-between items-center px-4 mb-32">
-        <div className="text-sm text-[#4d1fae]" style={{ marginLeft: '20px' }}>
-        </div>
-        <div>
-          <Footer />
-        </div>
+      {/* Footer mobile optimisé */}
+      <div className="mt-auto">
+        <Footer />
       </div>
-      <PlayerBar 
-        playerState={playerState}
-        onVolumeChange={handleVolumeChange}
-      />
+
+      {/* Player Bar avec gestion améliorée */}
+      {playerState.currentStation && (
+        <PlayerBar 
+          playerState={playerState}
+          onVolumeChange={handleVolumeChange}
+        />
+      )}
+
+      {/* Styles CSS personnalisés */}
+      <style>{`
+        @keyframes gradient-xy {
+          0%, 100% {
+            background-position: 0% 50%;
+          }
+          25% {
+            background-position: 100% 50%;
+          }
+          50% {
+            background-position: 100% 100%;
+          }
+          75% {
+            background-position: 0% 100%;
+          }
+        }
+        
+        .animate-gradient-xy {
+          background-size: 400% 400%;
+          animation: gradient-xy 15s ease infinite;
+        }
+        
+        /* Touch feedback */
+        @media (hover: none) and (pointer: coarse) {
+          button:active {
+            transform: scale(0.95);
+            transition: transform 0.1s;
+          }
+        }
+      `}</style>
     </div>
   )
 }

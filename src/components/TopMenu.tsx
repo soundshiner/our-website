@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Info, Mail, Menu, ShoppingBag, X, Radio,Calendar,Ticket,HeartHandshake,Users,Headphones, Instagram, Twitter, Youtube, Facebook} from "lucide-react";
 import { FaInstagram, FaYoutube, FaTiktok, FaMastodon, FaDiscord, FaFacebook, FaTwitter } from "react-icons/fa"
 import { FaBluesky } from "react-icons/fa6"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import AboutModal from "./AboutModal";
 import ContactModal from "./ContactModal";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -13,6 +13,7 @@ const TopMenu = () => {
   const [contactOpen, setContactOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   const handleMobileMenuToggle = () => {
     setMobileMenuOpen(prev => !prev);
@@ -198,6 +199,7 @@ const SocialIcon = ({ href, Icon, label }) => (
 
 // Composant MenuItem pour le menu mobile
 const MenuItem = ({ icon, label, onClick, href, external = false }) => {
+  const navigate = useNavigate();
   const handleClick = () => {
     if (onClick) {
       onClick();
@@ -205,7 +207,7 @@ const MenuItem = ({ icon, label, onClick, href, external = false }) => {
       if (external) {
         window.open(href, '_blank', 'noopener noreferrer');
       } else {
-        window.location.href = href;
+        navigate(href);
       }
     }
   };

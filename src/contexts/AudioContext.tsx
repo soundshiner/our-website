@@ -155,8 +155,10 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   useEffect(() => {
-    audioRef.current = new Audio();
-    audioRef.current.volume = playerState.volume;
+    if (!audioRef.current) {
+      audioRef.current = new Audio();
+      audioRef.current.volume = playerState.volume;
+    }
     
     return () => {
       if (metadataIntervalRef.current) {
@@ -167,6 +169,13 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         audioRef.current = null;
       }
     };
+  }, []); // Removed dependency on playerState.volume
+
+  // Separate effect for volume changes
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = playerState.volume;
+    }
   }, [playerState.volume]);
 
   const value: AudioContextType = {

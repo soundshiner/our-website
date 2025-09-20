@@ -98,7 +98,7 @@ const Index = () => {
           </div>
         </div>
 
-        <Footer />
+        
       </div>
     </>
   );

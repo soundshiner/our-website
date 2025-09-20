@@ -1,6 +1,6 @@
 import React from 'react';
 import Helmet from '@/components/Helmet';
-import Footer from '@/components/Footer';
+
 import { Button } from '@/components/ui/button';
 
 const Merch = () => {
@@ -113,7 +113,7 @@ const Merch = () => {
             </div>
           </div>
         </div>
-        <Footer />
+        
       </div>
     </>
   );

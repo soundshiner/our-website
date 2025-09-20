@@ -1,6 +1,6 @@
 import React from 'react';
 import Helmet from '@/components/Helmet';
-import Footer from '@/components/Footer';
+
 
 const Shows = () => {
   const shows = [
@@ -63,7 +63,7 @@ const Shows = () => {
             </p>
           </div>
         </div>
-        <Footer />
+        
       </div>
     </>
   );

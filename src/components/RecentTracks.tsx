@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAudio } from '@/contexts/AudioContext';
+ import { useAudio } from '@/contexts/useAudio';
 
 const RecentTracks: React.FC = () => {
   const { playerState } = useAudio();

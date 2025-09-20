@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from './Header';
 import PlayerBar from './PlayerBar';
+import Footer from './Footer';
 import { useAudio } from '@/contexts/useAudio';
 
 interface LayoutProps {
@@ -16,9 +17,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col">
       {!isHomePage && <Header />}
-      <main className="flex-1">
+      <main className={`flex-1 ${playerState.currentStation ? 'pb-20 sm:pb-24' : ''}`}>
         {children}
       </main>
+      {/* Footer seulement sur les pages autres que l'accueil */}
+      {!isHomePage && <Footer />}
+      {/* Player Bar maintenant persistant sur toutes les pages */}
       {playerState.currentStation && (
         <PlayerBar 
           playerState={playerState}

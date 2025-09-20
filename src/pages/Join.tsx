@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Helmet from '@/components/Helmet';
-import Footer from '@/components/Footer';
+
 import { Button } from '@/components/ui/button';
 
 const Join = () => {
@@ -74,7 +74,7 @@ const Join = () => {
             </div>
           </div>
         </div>
-        <Footer />
+        
       </div>
     </>
   );

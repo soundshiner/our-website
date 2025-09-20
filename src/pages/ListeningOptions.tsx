@@ -1,6 +1,6 @@
 import React from 'react';
 import Helmet from '@/components/Helmet';
-import Footer from '@/components/Footer';
+
 import { Button } from '@/components/ui/button';
 
 const ListeningOptions = () => {
@@ -121,7 +121,7 @@ const ListeningOptions = () => {
             </ul>
           </div>
         </div>
-        <Footer />
+        
       </div>
     </>
   );

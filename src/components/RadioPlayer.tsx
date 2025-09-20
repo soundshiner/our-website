@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from "react"
 import { RadioStation as RadioStationType } from "@/types/radio"
 import { PlayerState } from "@/types/radio"
-import PlayerBar from "./PlayerBar"
 import Footer from "./Footer"
 import { Play, Pause, Loader2 } from "lucide-react"
 import { Button } from "./ui/button"
 import { icecastService } from "@/services/icecastService"
 import { lastfmService } from "@/services/lastfmService"
 import TopMenu from "./TopMenu"
+import { useAudio } from '@/contexts/useAudio'
 
 const STATIONS: RadioStationType[] = [
   {
@@ -21,153 +21,8 @@ const STATIONS: RadioStationType[] = [
 ]
 
 const RadioPlayer = () => {
-  const [playerState, setPlayerState] = useState<PlayerState>({
-    isPlaying: false,
-    currentStation: null,
-    volume: 0.5,
-    isLoading: false,
-    currentArtist: undefined,
-    currentTitle: undefined,
-    albumCover: undefined
-  })
-
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-  const metadataIntervalRef = useRef<number>()
-
-  const fetchMetadata = async (station: RadioStationType) => {
-    if (!station.metadataUrl) {
-      console.warn("No metadata URL for station:", station.name)
-      return
-    }
-
-    try {
-      console.log("Fetching metadata for station:", station.name)
-      
-      const metadata = await icecastService.fetchMetadata(station.metadataUrl)
-      
-      if (metadata) {
-        const { artist, title } = metadata
-        console.log("Got metadata:", { artist, title })
-
-        setPlayerState(prev => ({
-          ...prev,
-          currentArtist: artist,
-          currentTitle: title,
-          isLoading: false
-        }))
-
-        try {
-          const albumCover = await lastfmService.getAlbumArt(artist, title)
-          setPlayerState(prev => ({
-            ...prev,
-            albumCover
-          }))
-        } catch (coverError) {
-          console.error("Error fetching album cover:", coverError)
-          setPlayerState(prev => ({
-            ...prev,
-            albumCover: null
-          }))
-        }
-      } else {
-        console.log("No metadata available")
-        setPlayerState(prev => ({
-          ...prev,
-          currentArtist: 'Radio SoundShine',
-          currentTitle: 'En direct',
-          isLoading: false,
-          albumCover: null
-        }))
-      }
-    } catch (error) {
-      console.error('Error in fetchMetadata:', error)
-      setPlayerState(prev => ({
-        ...prev,
-        currentArtist: 'Radio SoundShine',
-        currentTitle: 'Erreur de métadonnées',
-        isLoading: false,
-        albumCover: null
-      }))
-    }
-  }
-
-  const handlePlay = async (station: RadioStationType) => {
-    if (!audioRef.current) return
-
-    setPlayerState(prev => ({ ...prev, isLoading: true }))
-    console.log("Trying to play station:", station.name)
-
-    try {
-      if (playerState.currentStation?.id === station.id) {
-        await audioRef.current.play()
-        setPlayerState(prev => ({ 
-          ...prev, 
-          isPlaying: true,
-          isLoading: false 
-        }))
-      } else {
-        if (metadataIntervalRef.current) {
-          window.clearInterval(metadataIntervalRef.current)
-        }
-
-        audioRef.current.src = station.streamUrl
-        await audioRef.current.play()
-
-        console.log("Playing new station:", station.name)
-        setPlayerState(prev => ({
-          ...prev,
-          isPlaying: true,
-          currentStation: station,
-          currentArtist: 'soundSHINE Radio',
-          currentTitle: 'En cours de chargement...',
-          albumCover: null
-        }))
-
-        await fetchMetadata(station)
-
-        metadataIntervalRef.current = window.setInterval(() => {
-          fetchMetadata(station)
-        }, 15000)
-      }
-    } catch (error) {
-      console.error('Failed to play audio:', error)
-      setPlayerState(prev => ({ 
-        ...prev, 
-        isLoading: false,
-        currentArtist: 'Radio SoundShine',
-        currentTitle: 'Erreur de lecture'
-      }))
-    }
-  }
-
-  const handlePause = () => {
-    if (audioRef.current) {
-      audioRef.current.pause()
-      setPlayerState(prev => ({ ...prev, isPlaying: false }))
-    }
-  }
-
-  const handleVolumeChange = (value: number) => {
-    if (audioRef.current) {
-      audioRef.current.volume = value
-      setPlayerState(prev => ({ ...prev, volume: value }))
-    }
-  }
-
-  useEffect(() => {
-    audioRef.current = new Audio()
-    audioRef.current.volume = playerState.volume
-    
-    return () => {
-      if (metadataIntervalRef.current) {
-        window.clearInterval(metadataIntervalRef.current)
-      }
-      if (audioRef.current) {
-        audioRef.current.pause()
-        audioRef.current = null
-      }
-    }
-  }, [playerState.volume])
+  // Utilisation du contexte audio global
+  const { playerState, handlePlay, handlePause } = useAudio();
 
   return (
     <div className="min-h-screen w-full text-white flex flex-col bg-gradient-to-br from-purple-400 via-pink-300 to-green-300 animate-gradient-xy">
@@ -228,16 +83,8 @@ const RadioPlayer = () => {
 
       {/* Footer mobile optimisé */}
       <div className="mt-auto">
-        <Footer />
+        
       </div>
-
-      {/* Player Bar avec gestion améliorée */}
-      {playerState.currentStation && (
-        <PlayerBar 
-          playerState={playerState}
-          onVolumeChange={handleVolumeChange}
-        />
-      )}
 
       {/* Styles CSS personnalisés */}
       <style>{`

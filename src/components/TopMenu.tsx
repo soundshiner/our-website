@@ -95,23 +95,17 @@ const TopMenu = () => {
             ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}
           `}>
             {/* Header du menu avec gradient */}
-            <div className="bg-gradient-to-r from-[#4d1fae] to-[#f0b1f7] p-6 text-white">
-              <div className="flex items-center justify-between mb-4">
+            <div>
+              <div className="flex items-center justify-between p-5">
                 <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
-                    <span className="text-white font-bold">sS</span>
-                  </div>
-                  <div>
-                    <h2 className="font-bold text-lg">soundSHINE Radio</h2>
-                    <p className="text-purple-100 text-sm">En direct</p>
-                  </div>
-                </div>
                 <button 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+                  className="p-2 rounded-full  bg-gray-100/80 hover:bg-gray-200/80 text-[#220d50] transition-colors"
                 >
                   <X className="h-5 w-5" />
                 </button>
+                </div>
+
               </div>
             </div>
 

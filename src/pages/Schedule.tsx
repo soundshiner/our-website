@@ -1,6 +1,6 @@
 import React from 'react';
 import Helmet from '@/components/Helmet';
-import Footer from '@/components/Footer';
+
 
 const Schedule = () => {
   const schedule = [
@@ -83,7 +83,7 @@ const Schedule = () => {
             </ul>
           </div>
         </div>
-        <Footer />
+        
       </div>
     </>
   );

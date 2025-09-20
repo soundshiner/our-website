@@ -1,6 +1,6 @@
 import React from 'react';
 import Helmet from '@/components/Helmet';
-import Footer from '@/components/Footer';
+
 import { Button } from '@/components/ui/button';
 
 const Events = () => {
@@ -105,7 +105,7 @@ const Events = () => {
             </Button>
           </div>
         </div>
-        <Footer />
+        
       </div>
     </>
   );

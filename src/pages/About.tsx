@@ -1,6 +1,6 @@
 import React from 'react';
 import Helmet from '@/components/Helmet';
-import Footer from '@/components/Footer';
+
 
 const About = () => {
   return (
@@ -46,7 +46,7 @@ const About = () => {
             </p>
           </div>
         </div>
-        <Footer />
+        
       </div>
     </>
   );

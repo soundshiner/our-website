@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useState, useRef, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useRef, useEffect, ReactNode } from 'react';
 import { PlayerState, RadioStation } from '@/types/radio';
 import { icecastService } from '@/services/icecastService';
 import { lastfmService } from '@/services/lastfmService';
-import { STATIONS } from './stations';
+import { AudioContext } from './audioContextInstance';
 
 export interface AudioContextType {
   playerState: PlayerState;
@@ -11,9 +11,6 @@ export interface AudioContextType {
   handlePause: () => void;
   handleVolumeChange: (value: number) => void;
 }
-
-import { AudioContext } from './audioContextInstance';
-
 
 export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [playerState, setPlayerState] = useState<PlayerState>({
@@ -29,6 +26,44 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const metadataIntervalRef = useRef<number>();
 
+  // Initialiser l'audio dès le montage du provider
+  useEffect(() => {
+    if (!audioRef.current) {
+      audioRef.current = new Audio();
+      audioRef.current.volume = playerState.volume;
+      
+      // Événements audio pour debugging
+      audioRef.current.addEventListener('play', () => {
+        console.log('🎵 Audio started playing');
+      });
+      
+      audioRef.current.addEventListener('pause', () => {
+        console.log('⏸️ Audio paused');
+      });
+      
+      audioRef.current.addEventListener('error', (e) => {
+        console.error('❌ Audio error:', e);
+      });
+    }
+    
+    return () => {
+      if (metadataIntervalRef.current) {
+        window.clearInterval(metadataIntervalRef.current);
+      }
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  // Mettre à jour le volume quand il change
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = playerState.volume;
+    }
+  }, [playerState.volume]);
+
   const fetchMetadata = async (station: RadioStation) => {
     if (!station.metadataUrl) {
       console.warn("No metadata URL for station:", station.name);
@@ -36,13 +71,13 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
 
     try {
-      console.log("Fetching metadata for station:", station.name);
+      console.log("🔍 Fetching metadata for station:", station.name);
       
       const metadata = await icecastService.fetchMetadata(station.metadataUrl);
       
       if (metadata) {
         const { artist, title } = metadata;
-        console.log("Got metadata:", { artist, title });
+        console.log("📊 Got metadata:", { artist, title });
 
         setPlayerState(prev => ({
           ...prev,
@@ -65,20 +100,20 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           }));
         }
       } else {
-        console.log("No metadata available");
+        console.log("📻 No metadata available - using fallback");
         setPlayerState(prev => ({
           ...prev,
-          currentArtist: 'Radio SoundShine',
+          currentArtist: 'soundSHINE Radio',
           currentTitle: 'En direct',
           isLoading: false,
           albumCover: null
         }));
       }
     } catch (error) {
-      console.error('Error in fetchMetadata:', error);
+      console.error('❌ Error in fetchMetadata:', error);
       setPlayerState(prev => ({
         ...prev,
-        currentArtist: 'Radio SoundShine',
+        currentArtist: 'soundSHINE Radio',
         currentTitle: 'Erreur de métadonnées',
         isLoading: false,
         albumCover: null
@@ -87,13 +122,18 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const handlePlay = async (station: RadioStation) => {
-    if (!audioRef.current) return;
+    console.log("▶️ handlePlay called with station:", station.name);
+    
+    if (!audioRef.current) {
+      console.error("❌ Audio ref is null!");
+      return;
+    }
 
     setPlayerState(prev => ({ ...prev, isLoading: true }));
-    console.log("Trying to play station:", station.name);
 
     try {
-      if (playerState.currentStation?.id === station.id) {
+      if (playerState.currentStation?.id === station.id && !playerState.isPlaying) {
+        console.log("🔄 Resuming same station...");
         await audioRef.current.play();
         setPlayerState(prev => ({ 
           ...prev, 
@@ -105,37 +145,41 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           window.clearInterval(metadataIntervalRef.current);
         }
 
+        console.log("🆕 Setting new stream URL:", station.streamUrl);
         audioRef.current.src = station.streamUrl;
         await audioRef.current.play();
 
-        console.log("Playing new station:", station.name);
         setPlayerState(prev => ({
           ...prev,
           isPlaying: true,
           currentStation: station,
-          currentArtist: 'Radio SoundShine',
+          currentArtist: 'soundSHINE Radio',
           currentTitle: 'Connexion en cours...',
-          albumCover: null
+          albumCover: null,
+          isLoading: false
         }));
 
+        // Fetch metadata immediately
         await fetchMetadata(station);
 
+        // Set up metadata polling
         metadataIntervalRef.current = window.setInterval(() => {
           fetchMetadata(station);
         }, 15000);
       }
     } catch (error) {
-      console.error('Failed to play audio:', error);
+      console.error('❌ Failed to play audio:', error);
       setPlayerState(prev => ({ 
         ...prev, 
         isLoading: false,
-        currentArtist: 'Radio SoundShine',
+        currentArtist: 'soundSHINE Radio',
         currentTitle: 'Erreur de lecture'
       }));
     }
   };
 
   const handlePause = () => {
+    console.log("⏸️ handlePause called");
     if (audioRef.current) {
       audioRef.current.pause();
       setPlayerState(prev => ({ ...prev, isPlaying: false }));
@@ -143,31 +187,9 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const handleVolumeChange = (value: number) => {
-    if (audioRef.current) {
-      audioRef.current.volume = value;
-      setPlayerState(prev => ({ ...prev, volume: value }));
-      // Si le volume passe de 0 à > 0, relancer la lecture
-      if (value > 0 && playerState.isPlaying === false) {
-        audioRef.current.play();
-        setPlayerState(prev => ({ ...prev, isPlaying: true }));
-      }
-    }
+    console.log("🔊 Volume change:", Math.round(value * 100) + "%");
+    setPlayerState(prev => ({ ...prev, volume: value }));
   };
-
-  useEffect(() => {
-    audioRef.current = new Audio();
-    audioRef.current.volume = playerState.volume;
-    
-    return () => {
-      if (metadataIntervalRef.current) {
-        window.clearInterval(metadataIntervalRef.current);
-      }
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
-  }, [playerState.volume]);
 
   const value: AudioContextType = {
     playerState,
@@ -182,13 +204,4 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       {children}
     </AudioContext.Provider>
   );
-};
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const useAudio = () => {
-  const context = useContext(AudioContext);
-  if (context === undefined) {
-    throw new Error('useAudio must be used within an AudioProvider');
-  }
-  return context;
 };

@@ -7,4 +7,4 @@ export const useAudio = () => {
     throw new Error('useAudio must be used within an AudioProvider');
   }
   return context;
-}
+};

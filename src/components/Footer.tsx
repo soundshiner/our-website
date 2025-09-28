@@ -1,5 +1,5 @@
-import { FaInstagram, FaYoutube, FaTiktok, FaMastodon, FaDiscord, FaFacebook, FaTwitter } from "react-icons/fa"
-import { FaBluesky } from "react-icons/fa6"
+import { FaInstagram, FaSpotify, FaTiktok, FaMastodon, FaDiscord, FaFacebook, FaTwitter } from "react-icons/fa"
+
 import { Link } from "react-router-dom"
 import { useIsMobile } from "@/hooks/use-mobile"
 
@@ -13,26 +13,26 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-4">
           {/* Réseaux sociaux centrés */}
           <div className="flex justify-center space-x-6 mb-6">
-            <SocialIcon 
-              href="https://www.instagram.com/soundshiner/" 
-              Icon={FaInstagram}
-              label="Instagram"
-            />
-            <SocialIcon 
-              href="https://discord.gg/uhc7RUSk84" 
-              Icon={FaDiscord}
-              label="Discord"
-            />
-            <SocialIcon 
-              href="https://www.facebook.com/soundshiner/" 
-              Icon={FaFacebook}
-              label="Facebook"
-            />
-            <SocialIcon 
-              href="https://www.x.com/soundshiner/" 
-              Icon={FaTwitter}
-              label="Twitter"
-            />
+                <SocialIcon 
+                  href="https://www.instagram.com/soundshiner/" 
+                  Icon={FaInstagram}
+                  label="Instagram"
+                />
+                <SocialIcon 
+                  href="https://discord.gg/uhc7RUSk84" 
+                  Icon={FaDiscord}
+                  label="Discord"
+                />
+                <SocialIcon 
+                  href="https://open.spotify.com/user/316yn4wijdycswzqrlmhzn6oedbq" 
+                  Icon={FaSpotify}
+                  label="Spotify"
+                />
+                <SocialIcon 
+                  href="https://www.tiktok.com/@soundshiner" 
+                  Icon={FaTiktok}
+                  label="TikTok"
+                />
           </div>
 
           {/* Copyright centré */}
@@ -148,23 +148,7 @@ const Footer = () => {
               <FaInstagram size={20} />
             </a>
             <a 
-              href="#" 
-              target="_blank"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Bluesky"
-            >
-              <FaBluesky size={20} />
-            </a>
-            <a 
-              href="#" 
-              target="_blank"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Mastodon"
-            >
-              <FaMastodon size={20} />
-            </a>
-            <a 
-              href="#" 
+              href="https://www.tiktok.com/@soundshiner" 
               target="_blank"
               className="text-muted-foreground hover:text-foreground transition-colors"
               aria-label="TikTok"
@@ -172,12 +156,12 @@ const Footer = () => {
               <FaTiktok size={20} />
             </a>
             <a 
-              href="#" 
+              href="https://open.spotify.com/user/316yn4wijdycswzqrlmhzn6oedbq" 
               target="_blank"
               className="text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="YouTube"
+              aria-label="Spotify"
             >
-              <FaYoutube size={20} />
+              <FaSpotify size={20} />
             </a>
             <a 
               href="https://discord.gg/uhc7RUSk84" 
